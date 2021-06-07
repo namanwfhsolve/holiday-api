@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Holidays API</title>
+</head>
+
+<body>
+
+    <script>
+        (function () {
+            const now = new Date();
+            const year = now.getFullYear();
+            const params = new URLSearchParams(window.location.search);
+            const from = params.get("from") || `${year - 1}-01-01T00:00:00Z`;
+            const to = params.get("to") || `${year}-01-01T00:00:00Z`;
+            const country = params.get("country") || "indian";
+
+            window.onload = function () {
+                fetch(`https://www.googleapis.com/calendar/v3/calendars/en.${country}%23holiday%40group.v.calendar.google.com/events?key=AIzaSyAEwhpXgJGK7A2SCHtIhzje7-z7KNqODfU&timeMin=${from}&timeMax=${to}`).then(res => res.json()).then(res => {
+                    const arrData = res.map(el => [el.start.date, el.summary]);
+                    const head = ["date", "event"];
+                    head.push(arrData);
+                    const csvContent = "data:text/csv;charset=utf-8,"
+                        + head.map(e => e.join(",")).join("\n");
+
+                    window.location.href = encodeURI(csvContent);
+                }).catch(error => {
+                    console.log(error);
+                    document.body += "<h1>somthing went wrong. Please try again later!</h1>"
+                })
+            }
+        })();
+    </script>
+</body>
+
+</html>
