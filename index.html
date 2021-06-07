@@ -21,7 +21,7 @@
 
             window.onload = function () {
                 fetch(`https://www.googleapis.com/calendar/v3/calendars/en.${country}%23holiday%40group.v.calendar.google.com/events?key=AIzaSyAEwhpXgJGK7A2SCHtIhzje7-z7KNqODfU&timeMin=${from}&timeMax=${to}`).then(res => res.json()).then(res => {
-                    const arrData = res.map(el => [el.start.date, el.summary]);
+                    const arrData = res.items.map(el => [el.start.date, el.summary]);
                     const head = ["date", "event"];
                     head.push(arrData);
                     const csvContent = "data:text/csv;charset=utf-8,"
@@ -30,7 +30,7 @@
                     window.location.href = encodeURI(csvContent);
                 }).catch(error => {
                     console.log(error);
-                    document.body += "<h1>somthing went wrong. Please try again later!</h1>"
+                    document.body.innerHTML += "<h1>somthing went wrong. Please try again later!</h1>"
                 })
             }
         })();
