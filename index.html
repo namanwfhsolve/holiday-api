@@ -43,7 +43,7 @@
                     link.setAttribute("download", `holidays.${format}`);
                     document.body.appendChild(link); // Required for FF
                     link.click();
-                    // window.close();
+                    window.close();
                 }).catch(error => {
                     console.log(error);
                     document.body.innerHTML += "<h1>somthing went wrong. Please try again later!</h1>"
